@@ -1,5 +1,10 @@
 class InitialSchema < ActiveRecord::Migration[8.2]
   def change
+    # Specific for Mysql
+    if connection.adapter_name == "PostgreSQL"
+      enable_extension 'pgcrypto' unless extension_enabled?('pgcrypto')
+    end
+
     create_table "accesses", id: :uuid, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci" do |t|
       t.datetime "accessed_at"
       t.uuid "board_id", null: false
@@ -32,7 +37,7 @@ class InitialSchema < ActiveRecord::Migration[8.2]
     end
 
     create_table "action_text_rich_texts", id: :uuid, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci" do |t|
-      t.text "body", size: :long
+      t.text "body"
       t.datetime "created_at", null: false
       t.string "name", limit: 255, null: false
       t.uuid "record_id", null: false
@@ -230,7 +235,7 @@ class InitialSchema < ActiveRecord::Migration[8.2]
       t.uuid "creator_id", null: false
       t.uuid "eventable_id", null: false
       t.string "eventable_type", limit: 255, null: false
-      t.json "particulars", default: -> { "(json_object())" }
+      t.json "particulars"
       t.datetime "updated_at", null: false
       t.index ["action"], name: "index_events_on_summary_id_and_action"
       t.index ["board_id", "action", "created_at"], name: "index_events_on_board_id_and_action_and_created_at"
@@ -243,7 +248,7 @@ class InitialSchema < ActiveRecord::Migration[8.2]
       t.uuid "account_id"
       t.datetime "created_at", null: false
       t.uuid "creator_id", null: false
-      t.json "fields", default: -> { "(json_object())" }, null: false
+      t.json "fields", null: false
       t.string "params_digest", limit: 255, null: false
       t.datetime "updated_at", null: false
       t.index ["creator_id", "params_digest"], name: "index_filters_on_creator_id_and_params_digest", unique: true

@@ -1,7 +1,7 @@
 class CreateSearchIndices < ActiveRecord::Migration[8.2]
   def up
-    # Skip for SQLite - it doesn't use these tables
-    return if connection.adapter_name == "SQLite"
+    # Specific for Mysql
+    return unless connection.adapter_name.include?("Mysql")
 
     16.times do |i|
       create_table "search_index_#{i}".to_sym, id: :uuid, charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci" do |t|
@@ -20,8 +20,8 @@ class CreateSearchIndices < ActiveRecord::Migration[8.2]
   end
 
   def down
-    # Skip for SQLite - it doesn't use these tables
-    return if connection.adapter_name == "SQLite"
+    # Specific for Mysql
+    return unless connection.adapter_name == "SQLite"
 
     16.times do |i|
       drop_table "search_index_#{i}".to_sym

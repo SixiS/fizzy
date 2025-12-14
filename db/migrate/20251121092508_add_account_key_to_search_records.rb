@@ -1,6 +1,7 @@
 class AddAccountKeyToSearchRecords < ActiveRecord::Migration[8.2]
   def up
-    return if ActiveRecord::Base.connection.adapter_name == "SQLite"
+    # Specific for Mysql
+    return unless connection.adapter_name.include?("Mysql")
 
     16.times do |shard_id|
       table_name = "search_records_#{shard_id}"
@@ -11,7 +12,8 @@ class AddAccountKeyToSearchRecords < ActiveRecord::Migration[8.2]
   end
 
   def down
-    return if ActiveRecord::Base.connection.adapter_name == "SQLite"
+    # Specific for Mysql
+    return unless connection.adapter_name.include?("Mysql")
 
     16.times do |shard_id|
       table_name = "search_records_#{shard_id}"

@@ -38,7 +38,9 @@ end
 
 module ActiveSupport
   class TestCase
-    parallelize workers: :number_of_processors, work_stealing: ENV["WORK_STEALING"] != "false"
+    if ActiveRecord::Base.connection.adapter_name != "PostgreSQL"
+      parallelize workers: :number_of_processors, work_stealing: ENV["WORK_STEALING"] != "false"
+    end
 
     # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
     fixtures :all
@@ -154,8 +156,11 @@ module FixturesTestHelper
 
       # Format as UUID string and convert to base36 (25 chars)
       uuid = "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x" % bytes
-      hex = uuid.delete("-")
-      hex.to_i(16).to_s(36).rjust(25, "0")
+      if ActiveRecord::Base.connection.adapter_name != "PostgreSQL"
+        hex = uuid.delete("-")
+        uuid = hex.to_i(16).to_s(36).rjust(25, "0")
+      end
+      uuid
     end
   end
 end

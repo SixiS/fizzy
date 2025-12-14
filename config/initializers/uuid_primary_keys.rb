@@ -109,8 +109,10 @@ module TableDefinitionUuidSupport
 end
 
 ActiveSupport.on_load(:active_record) do
-  ActiveRecord::Base.singleton_class.prepend(UuidPrimaryKeyDefault)
-  ActiveRecord::ConnectionAdapters::TableDefinition.prepend(TableDefinitionUuidSupport)
+  if ActiveRecord::Base.connection.adapter_name != "PostgreSQL"
+    ActiveRecord::Base.singleton_class.prepend(UuidPrimaryKeyDefault)
+    ActiveRecord::ConnectionAdapters::TableDefinition.prepend(TableDefinitionUuidSupport)
+  end
 end
 
 ActiveSupport.on_load(:active_record_trilogyadapter) do

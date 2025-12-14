@@ -1,6 +1,6 @@
 class AddUniqueIndexToCardActivitySpikesOnCardId < ActiveRecord::Migration[8.2]
   def change
-    if ActiveRecord::Base.connection.adapter_name != "SQLite"
+    if ActiveRecord::Base.connection.adapter_name == "Mysql"
       reversible do |dir|
         dir.up do
           execute <<-SQL
