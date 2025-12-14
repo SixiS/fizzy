@@ -12,33 +12,41 @@ development:
   primary:
     <<: *default
     database: fizzy_development
+    schema_dump: schema_postgres.rb
   cable:
     <<: *default
     database: fizzy_development_cable
     migrations_paths: db/cable_migrate
+    schema_dump: cable_schema_postgres.rb
 
 test:
   primary:
     <<: *default
     database: fizzy_test
+    schema_dump: schema_postgres.rb
   cable:
     <<: *default
     database: fizzy_test_cable
     migrations_paths: db/cable_migrate
+    schema_dump: cable_schema_postgres.rb
 
 production:
   primary:
     <<: *default
     database: fizzy_production
+    schema_dump: schema_postgres.rb
   cable:
     <<: *default
     database: fizzy_production_cable
     migrations_paths: db/cable_migrate
+    schema_dump: cable_schema_postgres.rb
   queue:
     <<: *default
     database: fizzy_production_queue
     migrations_paths: db/queue_migrate
+    schema_dump: queue_schema_postgres.rb
   cache:
     <<: *default
     database: fizzy_production_cache
     migrations_paths: db/cache_migrate
+    schema_dump: cache_schema_postgres.rb
